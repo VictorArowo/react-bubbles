@@ -22,8 +22,24 @@ const Login = ({ history }) => {
   };
 
   return (
-    <>
-      <form onSubmit={handleSubmit}>
+    <div
+      style={{
+        backgroundImage: "url('image.png')",
+        width: '100vw',
+        height: '100vh',
+        margin: 0,
+        color: 'white',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center'
+      }}
+    >
+      <h1>Login</h1>
+      <form
+        onSubmit={handleSubmit}
+        style={{ marginTop: '100px', width: '350px' }}
+        className="login"
+      >
         <input
           type="text"
           name="username"
@@ -42,7 +58,7 @@ const Login = ({ history }) => {
         <br />
         <input type="submit" />
       </form>
-    </>
+    </div>
   );
 };
 
