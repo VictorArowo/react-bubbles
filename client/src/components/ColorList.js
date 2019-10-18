@@ -7,7 +7,6 @@ const initialColor = {
 };
 
 const ColorList = ({ colors, updateColors }) => {
-  console.log(colors);
   const [editing, setEditing] = useState(false);
   const [colorToEdit, setColorToEdit] = useState(initialColor);
   const [addColorForm, setAddColorForm] = useState({
@@ -50,12 +49,13 @@ const ColorList = ({ colors, updateColors }) => {
       });
   };
 
-  const deleteColor = color => {
+  const deleteColor = (color, e) => {
+    e.stopPropagation();
     axiosWithAuth()
       .delete(`/${color.id}`)
       .then(({ data }) => {
         updateColors(colors.filter(color => color.id !== data));
-        setEditing(false);
+        // setEditing(false);
       })
       .catch(err => {
         console.error(err);
@@ -69,7 +69,7 @@ const ColorList = ({ colors, updateColors }) => {
         {colors.map(color => (
           <li key={color.color} onClick={() => editColor(color)}>
             <span>
-              <span className="delete" onClick={() => deleteColor(color)}>
+              <span className="delete" onClick={e => deleteColor(color, e)}>
                 x
               </span>{' '}
               {color.color}
