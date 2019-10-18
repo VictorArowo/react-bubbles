@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { Redirect } from 'react-router-dom';
 
 const Login = ({ history }) => {
   const [loginForm, setLoginForm] = useState({
@@ -34,6 +35,7 @@ const Login = ({ history }) => {
         alignItems: 'center'
       }}
     >
+      {localStorage.getItem('token') ? <Redirect to="/bubbles" /> : null}
       <h1>Login</h1>
       <form
         onSubmit={handleSubmit}
