@@ -10,7 +10,23 @@ const ColorList = ({ colors, updateColors }) => {
   console.log(colors);
   const [editing, setEditing] = useState(false);
   const [colorToEdit, setColorToEdit] = useState(initialColor);
+  const [addColorForm, setAddColorForm] = useState({
+    color: '',
+    hex: ''
+  });
 
+  const handleChange = e => {
+    setAddColorForm({ ...addColorForm, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = e => {
+    e.preventDefault();
+    axiosWithAuth()
+      .post('', { color: addColorForm.color, code: { hex: addColorForm.hex } })
+      .then(({ data }) => {
+        updateColors(data);
+      });
+  };
   const editColor = color => {
     setEditing(true);
     setColorToEdit(color);
@@ -96,7 +112,25 @@ const ColorList = ({ colors, updateColors }) => {
         </form>
       )}
       <div className="spacer" />
-      {/* stretch - build another form here to add a color */}
+      <form onSubmit={handleSubmit}>
+        <input
+          type="text"
+          name="color"
+          placeholder="Color"
+          value={addColorForm.color}
+          onChange={handleChange}
+        />
+        <br />
+        <input
+          type="text"
+          name="hex"
+          placeholder="Hexcode"
+          value={addColorForm.hex}
+          onChange={handleChange}
+        />
+        <br />
+        <input type="submit" />
+      </form>
     </div>
   );
 };
