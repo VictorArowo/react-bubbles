@@ -1,13 +1,66 @@
-import React from "react";
+import React, { useState } from 'react';
+import axios from 'axios';
+import { Redirect } from 'react-router-dom';
 
-const Login = () => {
-  // make a post request to retrieve a token from the api
-  // when you have handled the token, navigate to the BubblePage route
+const Login = ({ history }) => {
+  const [loginForm, setLoginForm] = useState({
+    username: '',
+    password: ''
+  });
+
+  const handleChange = e => {
+    setLoginForm({ ...loginForm, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = e => {
+    e.preventDefault();
+    axios
+      .post('http://localhost:5000/api/login', loginForm)
+      .then(({ data: { payload } }) => {
+        localStorage.setItem('token', `${payload}`);
+        history.push('/bubbles');
+      });
+  };
+
   return (
-    <>
-      <h1>Welcome to the Bubble App!</h1>
-      <p>Build a login page here</p>
-    </>
+    <div
+      style={{
+        backgroundImage: "url('image.png')",
+        width: '100vw',
+        height: '100vh',
+        margin: 0,
+        color: 'white',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center'
+      }}
+    >
+      {localStorage.getItem('token') ? <Redirect to="/bubbles" /> : null}
+      <h1>Login</h1>
+      <form
+        onSubmit={handleSubmit}
+        style={{ marginTop: '100px', width: '350px' }}
+        className="login"
+      >
+        <input
+          type="text"
+          name="username"
+          placeholder="Username"
+          value={loginForm.username}
+          onChange={handleChange}
+        />
+        <br />
+        <input
+          type="password"
+          name="password"
+          placeholder="Password"
+          value={loginForm.password}
+          onChange={handleChange}
+        />
+        <br />
+        <input type="submit" />
+      </form>
+    </div>
   );
 };
 
